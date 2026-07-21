@@ -1,35 +1,40 @@
 import { Transaction } from "../types/transaction";
 
-interface Props {
+interface TransactionCardProps {
   transaction: Transaction;
+  onDelete: (id: number) => void;
 }
 
-export default function TransactionCard({ transaction }: Props) {
+export default function TransactionCard({
+  transaction,
+  onDelete,
+}: TransactionCardProps) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow">
-      <div className="flex justify-between">
+    <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow">
+      <div>
+        <h3 className="font-semibold">{transaction.title}</h3>
+        <p className="text-sm text-gray-500">{transaction.date}</p>
+      </div>
 
-        <div>
-          <p className="font-semibold">
-            {transaction.type === "expense" ? "💸" : "💼"} {transaction.title}
-          </p>
-
-          <p className="text-gray-500">
-            {transaction.date}
-          </p>
-        </div>
-
-        <p
+      <div className="flex items-center gap-4">
+        <span
           className={`font-bold ${
-            transaction.type === "expense"
-              ? "text-red-500"
-              : "text-green-600"
+            transaction.type === "income"
+              ? "text-green-600"
+              : "text-red-500"
           }`}
         >
-          {transaction.type === "expense" ? "-" : "+"}
-          {transaction.amount.toLocaleString("uk-UA")} ₴
-        </p>
+          {transaction.type === "income" ? "+" : "-"}
+          {transaction.amount.toLocaleString("ru-RU")} ₴
+        </span>
 
+        <button
+          onClick={() => onDelete(transaction.id)}
+          className="text-xl transition hover:scale-110"
+          title="Удалить"
+        >
+          🗑️
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import BalanceCard from "./components/BalanceCard";
 import BottomNavigation from "./components/BottomNavigation";
@@ -10,8 +10,19 @@ import { initialTransactions } from "./data/transactions";
 import { Transaction } from "./types/transaction";
 
 export default function Home() {
-  const [transactions, setTransactions] =
-    useState<Transaction[]>(initialTransactions);
+  const [transactions, setTransactions] = useState<Transaction[]>(() => {
+    if (typeof window === "undefined") {
+      return initialTransactions;
+    }
+
+    const saved = localStorage.getItem("transactions");
+
+    return saved ? JSON.parse(saved) : initialTransactions;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  }, [transactions]);
 
   const income = useMemo(() => {
     return transactions
@@ -26,6 +37,10 @@ export default function Home() {
   }, [transactions]);
 
   const balance = income - expense;
+
+  function deleteTransaction(id: number) {
+    setTransactions((prev) => prev.filter((t) => t.id !== id));
+  }
 
   return (
     <main className="min-h-screen bg-pink-50 p-6 pb-32">
@@ -48,6 +63,7 @@ export default function Home() {
           <TransactionCard
             key={transaction.id}
             transaction={transaction}
+            onDelete={deleteTransaction}
           />
         ))}
       </div>
