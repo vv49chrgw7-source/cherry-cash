@@ -142,8 +142,11 @@ function addTransaction() {
           stiffness: 250,
           damping: 28,
         }}
-        className="glass w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-[38px] border border-white/40 p-7 shadow-2xl"
-      >
+        style={{
+  WebkitOverflowScrolling: "touch",
+  touchAction: "pan-y",
+}}
+className="glass w-full max-w-md max-h-[90vh] overflow-y-auto overscroll-contain touch-pan-y rounded-t-[38px] border border-white/40 p-7 shadow-2xl"      >
 <motion.button
   drag="y"
   dragConstraints={{ top: 0, bottom: 0 }}
