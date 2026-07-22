@@ -133,6 +133,7 @@ function addTransaction() {
   onClick={onClose}
 >
         <motion.div
+              onClick={(e) => e.stopPropagation()}
       drag="y"
 dragConstraints={{ top: 0, bottom: 0 }}
 dragElastic={0.2}
@@ -304,7 +305,6 @@ onDragEnd={(_, info) => {
           <div className="h-6" />
         </div>
       </motion.div>
-      onClick={(e) => e.stopPropagation()}
     </div>
   );
 }  
