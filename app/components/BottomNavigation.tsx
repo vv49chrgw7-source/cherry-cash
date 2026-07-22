@@ -9,6 +9,7 @@ import {
   Plus,
   User,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 import AddTransactionModal from "./AddTransactionModal";
 import AddGoalModal from "./AddGoalModal";
@@ -26,40 +27,72 @@ export default function BottomNavigation() {
     closeModal,
   } = useModal();
 
+  const navItem = (
+    href: string,
+    icon: React.ReactNode,
+    label: string
+  ) => {
+    const active = pathname === href;
+
+    return (
+      <Link
+        href={href}
+        className="relative flex flex-col items-center justify-center gap-1"
+      >
+        {active && (
+          <motion.div
+            layoutId="activeTab"
+            className="absolute -top-2 h-14 w-14 rounded-2xl bg-pink-100"
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 25,
+            }}
+          />
+        )}
+
+        <div
+          className={`relative z-10 transition-all duration-300 ${
+            active
+              ? "scale-110 text-pink-600"
+              : "text-gray-400 hover:scale-105 hover:text-pink-500"
+          }`}
+        >
+          {icon}
+        </div>
+
+        <span
+          className={`relative z-10 text-[11px] font-medium ${
+            active
+              ? "text-pink-600"
+              : "text-gray-400"
+          }`}
+        >
+          {label}
+        </span>
+      </Link>
+    );
+  };
+
   return (
     <>
       <nav className="fixed bottom-5 left-1/2 z-50 w-[95%] max-w-md -translate-x-1/2">
-        <div className="glass flex h-20 items-center justify-between rounded-[30px] px-5 shadow-pink">
+        <div className="glass shadow-pink flex h-20 items-center justify-between rounded-[32px] border border-white/40 px-6">
 
-          <Link
-            href="/"
-            className={`flex flex-col items-center gap-1 transition hover:scale-110 ${
-              pathname === "/"
-                ? "text-pink-600"
-                : "text-gray-400 hover:text-pink-500"
-            }`}
-          >
-            <House size={22} />
-            <span className="text-[11px]">
-              Главная
-            </span>
-          </Link>
+          {navItem("/", <House size={22} />, "Главная")}
 
-          <Link
-            href="/statistics"
-            className={`flex flex-col items-center gap-1 transition hover:scale-110 ${
-              pathname === "/statistics"
-                ? "text-pink-600"
-                : "text-gray-400 hover:text-pink-500"
-            }`}
-          >
-            <ChartPie size={22} />
-            <span className="text-[11px]">
-              Статистика
-            </span>
-          </Link>
+          {navItem(
+            "/statistics",
+            <ChartPie size={22} />,
+            "Статистика"
+          )}
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.92 }}
+            whileHover={{
+              scale: 1.08,
+              rotate: 90,
+            }}
             onClick={() => {
               if (pathname === "/goals") {
                 openGoalModal();
@@ -67,39 +100,22 @@ export default function BottomNavigation() {
                 openTransactionModal("expense");
               }
             }}
-            className="gradient-card shadow-pink -mt-12 flex h-18 w-18 items-center justify-center rounded-full text-white transition duration-200 hover:scale-105 active:scale-95"
+            className="gradient-card shadow-pink -mt-12 flex h-18 w-18 items-center justify-center rounded-full border-4 border-white text-white"
           >
             <Plus size={32} strokeWidth={2.8} />
-          </button>
+          </motion.button>
 
-          <Link
-            href="/goals"
-            className={`flex flex-col items-center gap-1 transition hover:scale-110 ${
-              pathname === "/goals"
-                ? "text-pink-600"
-                : "text-gray-400 hover:text-pink-500"
-            }`}
-          >
-            <Target size={22} />
-            <span className="text-[11px]">
-              Цели
-            </span>
-          </Link>
+          {navItem(
+            "/goals",
+            <Target size={22} />,
+            "Цели"
+          )}
 
-          <Link
-            href="/profile"
-            className={`flex flex-col items-center gap-1 transition hover:scale-110 ${
-              pathname === "/profile"
-                ? "text-pink-600"
-                : "text-gray-400 hover:text-pink-500"
-            }`}
-          >
-            <User size={22} />
-            <span className="text-[11px]">
-              Профиль
-            </span>
-          </Link>
-
+          {navItem(
+            "/profile",
+            <User size={22} />,
+            "Профиль"
+          )}
         </div>
       </nav>
 

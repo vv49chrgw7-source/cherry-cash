@@ -7,6 +7,8 @@ import {
   ReactNode,
 } from "react";
 
+import { Transaction } from "../types/transaction";
+
 type ModalType = "transaction" | "goal" | null;
 type TransactionType = "income" | "expense";
 
@@ -14,8 +16,14 @@ interface ModalContextType {
   modal: ModalType;
   transactionType: TransactionType;
 
+  editingTransaction: Transaction | null;
+
   openTransactionModal: (
     type?: TransactionType
+  ) => void;
+
+  openEditTransaction: (
+    transaction: Transaction
   ) => void;
 
   openGoalModal: () => void;
@@ -37,10 +45,22 @@ export function ModalProvider({
   const [transactionType, setTransactionType] =
     useState<TransactionType>("expense");
 
+  const [editingTransaction, setEditingTransaction] =
+    useState<Transaction | null>(null);
+
   function openTransactionModal(
     type: TransactionType = "expense"
   ) {
+    setEditingTransaction(null);
     setTransactionType(type);
+    setModal("transaction");
+  }
+
+  function openEditTransaction(
+    transaction: Transaction
+  ) {
+    setEditingTransaction(transaction);
+    setTransactionType(transaction.type);
     setModal("transaction");
   }
 
@@ -50,6 +70,7 @@ export function ModalProvider({
 
   function closeModal() {
     setModal(null);
+    setEditingTransaction(null);
   }
 
   return (
@@ -57,7 +78,9 @@ export function ModalProvider({
       value={{
         modal,
         transactionType,
+        editingTransaction,
         openTransactionModal,
+        openEditTransaction,
         openGoalModal,
         closeModal,
       }}

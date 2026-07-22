@@ -16,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cherry Cash",
-  description: "Personal finance tracker",
+  title: "Cherry Cash 🍒",
+  description: "Beautiful personal finance tracker",
+  applicationName: "Cherry Cash",
 };
 
 export default function RootLayout({
@@ -28,12 +29,27 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full">
+      <body
+        className="
+          min-h-screen
+          overflow-x-hidden
+          bg-gradient-to-br
+          from-pink-50
+          via-white
+          to-rose-100
+          text-gray-900
+          selection:bg-pink-500
+          selection:text-white
+        "
+      >
         <Providers>
           <ModalProvider>
-            {children}
+            <main className="relative min-h-screen">
+              {children}
+            </main>
           </ModalProvider>
         </Providers>
       </body>

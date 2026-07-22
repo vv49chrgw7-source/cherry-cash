@@ -9,7 +9,7 @@ import {
   ArrowUpRight,
   PlusCircle,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import BalanceCard from "./components/BalanceCard";
 import BottomNavigation from "./components/BottomNavigation";
@@ -259,32 +259,32 @@ export default function Home() {
         </span>
       </div>
 
-      <div className="mt-5 space-y-4">
-        {filteredTransactions.length > 0 ? (
-          filteredTransactions
-            .slice(0, 5)
-            .map((transaction) => (
-              <TransactionCard
-                key={transaction.id}
-                transaction={transaction}
-                onDelete={deleteTransaction}
-              />
-            ))
-        ) : (
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.95,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-            }}
-            className="glass rounded-3xl py-12 text-center"
-          >
-            <div className="text-5xl">
-              🍒
-            </div>
+<div className="mt-5 space-y-4">
+  {filteredTransactions.length > 0 ? (
+    <AnimatePresence mode="popLayout">
+      {filteredTransactions.slice(0, 5).map((transaction) => (
+        <TransactionCard
+          key={transaction.id}
+          transaction={transaction}
+          onDelete={deleteTransaction}
+        />
+      ))}
+    </AnimatePresence>
+  ) : (
+    <motion.div
+      initial={{
+        opacity: 0,
+        scale: 0.95,
+      }}
+      animate={{
+        opacity: 1,
+        scale: 1,
+      }}
+      className="glass rounded-3xl py-12 text-center"
+    >
+      <div className="text-5xl">
+        🍒
+      </div>
 
             <h3 className="mt-4 text-xl font-bold">
               Пока нет операций

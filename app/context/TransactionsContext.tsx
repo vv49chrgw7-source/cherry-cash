@@ -13,7 +13,13 @@ import { Transaction } from "../types/transaction";
 
 interface TransactionsContextType {
   transactions: Transaction[];
-  setTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
+  setTransactions: React.Dispatch<
+    React.SetStateAction<Transaction[]>
+  >;
+
+  updateTransaction: (
+    transaction: Transaction
+  ) => void;
 
   income: number;
   expense: number;
@@ -28,15 +34,19 @@ export function TransactionsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    if (typeof window === "undefined") {
-      return initialTransactions;
-    }
+  const [transactions, setTransactions] =
+    useState<Transaction[]>(() => {
+      if (typeof window === "undefined") {
+        return initialTransactions;
+      }
 
-    const saved = localStorage.getItem("transactions");
+      const saved =
+        localStorage.getItem("transactions");
 
-    return saved ? JSON.parse(saved) : initialTransactions;
-  });
+      return saved
+        ? JSON.parse(saved)
+        : initialTransactions;
+    });
 
   useEffect(() => {
     localStorage.setItem(
@@ -44,6 +54,18 @@ export function TransactionsProvider({
       JSON.stringify(transactions)
     );
   }, [transactions]);
+
+  function updateTransaction(
+    updatedTransaction: Transaction
+  ) {
+    setTransactions((prev) =>
+      prev.map((transaction) =>
+        transaction.id === updatedTransaction.id
+          ? updatedTransaction
+          : transaction
+      )
+    );
+  }
 
   const income = useMemo(() => {
     return transactions
@@ -64,6 +86,7 @@ export function TransactionsProvider({
       value={{
         transactions,
         setTransactions,
+        updateTransaction,
         income,
         expense,
         balance,
@@ -75,7 +98,9 @@ export function TransactionsProvider({
 }
 
 export function useTransactions() {
-  const context = useContext(TransactionsContext);
+  const context = useContext(
+    TransactionsContext
+  );
 
   if (!context) {
     throw new Error(
