@@ -134,14 +134,6 @@ function addTransaction() {
 >
         <motion.div
               onClick={(e) => e.stopPropagation()}
-      drag="y"
-dragConstraints={{ top: 0, bottom: 0 }}
-dragElastic={0.2}
-onDragEnd={(_, info) => {
-  if (info.offset.y > 120) {
-    onClose();
-  }
-}}
         initial={{ y: 500 }}
         animate={{ y: 0 }}
         exit={{ y: 500 }}
@@ -152,9 +144,17 @@ onDragEnd={(_, info) => {
         }}
         className="glass w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-[38px] border border-white/40 p-7 shadow-2xl"
       >
-<button
+<motion.button
+  drag="y"
+  dragConstraints={{ top: 0, bottom: 0 }}
+  dragElastic={0.2}
+  onDragEnd={(_, info) => {
+    if (info.offset.y > 120) {
+      onClose();
+    }
+  }}
   onClick={onClose}
-  className="mx-auto mb-6 block h-1.5 w-16 rounded-full bg-gray-300 transition-colors hover:bg-gray-400 active:bg-gray-500"
+  className="mx-auto mb-6 block h-1.5 w-16 cursor-grab rounded-full bg-gray-300 transition-colors hover:bg-gray-400 active:cursor-grabbing active:bg-gray-500"
 />
         <div className="mb-8 text-center">
           <div className="gradient-card shadow-pink mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl text-3xl text-white">
