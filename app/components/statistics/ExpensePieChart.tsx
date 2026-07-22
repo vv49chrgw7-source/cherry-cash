@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   PieChart,
   Pie,
@@ -8,6 +9,7 @@ import {
   Tooltip,
   Label,
 } from "recharts";
+import { PieChart as PieChartIcon } from "lucide-react";
 
 interface CategoryData {
   name: string;
@@ -20,39 +22,66 @@ interface ExpensePieChartProps {
 }
 
 const COLORS = [
-  "#ec4899",
-  "#f97316",
-  "#facc15",
-  "#22c55e",
-  "#3b82f6",
-  "#8b5cf6",
-  "#14b8a6",
-  "#ef4444",
+  "#EC4899",
+  "#F97316",
+  "#FACC15",
+  "#22C55E",
+  "#3B82F6",
+  "#8B5CF6",
+  "#14B8A6",
+  "#EF4444",
 ];
 
 export default function ExpensePieChart({
   data,
 }: ExpensePieChartProps) {
-  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const total = data.reduce(
+    (sum, item) => sum + item.value,
+    0
+  );
 
   return (
-    <div className="glass rounded-3xl p-6">
-      <h2 className="mb-5 text-xl font-bold">
-        Расходы по категориям
-      </h2>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="glass overflow-hidden rounded-[32px] border border-white/40 p-6"
+    >
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <p className="text-sm text-gray-500">
+            Анализ расходов
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            По категориям
+          </h2>
+        </div>
+
+        <div className="rounded-2xl bg-pink-100 p-3 text-pink-600">
+          <PieChartIcon size={24} />
+        </div>
+      </div>
 
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <Tooltip />
+            <Tooltip
+              contentStyle={{
+                borderRadius: 18,
+                border: "none",
+                boxShadow:
+                  "0 10px 35px rgba(0,0,0,.08)",
+              }}
+            />
 
             <Pie
               data={data}
               dataKey="value"
               nameKey="name"
-              innerRadius={75}
-              outerRadius={110}
-              paddingAngle={4}
+              innerRadius={82}
+              outerRadius={118}
+              paddingAngle={5}
+              cornerRadius={10}
             >
               {data.map((_, index) => (
                 <Cell
@@ -76,13 +105,13 @@ export default function ExpensePieChart({
                     <g>
                       <text
                         x={viewBox.cx}
-                        y={viewBox.cy - 8}
+                        y={viewBox.cy - 10}
                         textAnchor="middle"
-                        fontSize={24}
-                        fontWeight={700}
+                        fontSize={28}
+                        fontWeight={800}
                         fill="#111827"
                       >
-                        {total.toLocaleString()} ₴
+                        {total.toLocaleString("ru-RU")} ₴
                       </text>
 
                       <text
@@ -90,9 +119,9 @@ export default function ExpensePieChart({
                         y={viewBox.cy + 18}
                         textAnchor="middle"
                         fontSize={14}
-                        fill="#6b7280"
+                        fill="#9CA3AF"
                       >
-                        расходов
+                        всего расходов
                       </text>
                     </g>
                   );
@@ -103,7 +132,7 @@ export default function ExpensePieChart({
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-8 space-y-3">
         {data.map((item, index) => {
           const percent =
             total === 0
@@ -111,13 +140,17 @@ export default function ExpensePieChart({
               : ((item.value / total) * 100).toFixed(1);
 
           return (
-            <div
+            <motion.div
               key={item.name}
-              className="flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3"
+              whileHover={{
+                y: -2,
+                scale: 1.01,
+              }}
+              className="glass flex items-center justify-between rounded-2xl border border-white/40 p-4"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div
-                  className="h-3 w-3 rounded-full"
+                  className="h-4 w-4 rounded-full shadow"
                   style={{
                     backgroundColor:
                       COLORS[index % COLORS.length],
@@ -128,24 +161,29 @@ export default function ExpensePieChart({
                   {item.emoji}
                 </span>
 
-                <span className="font-medium">
-                  {item.name}
-                </span>
+                <div>
+                  <p className="font-semibold">
+                    {item.name}
+                  </p>
+
+                  <p className="text-sm text-gray-500">
+                    {percent}% от расходов
+                  </p>
+                </div>
               </div>
 
               <div className="text-right">
-                <div className="font-bold">
-                  {item.value.toLocaleString()} ₴
-                </div>
-
-                <div className="text-sm text-gray-500">
-                  {percent}%
+                <div className="text-lg font-bold">
+                  {item.value.toLocaleString(
+                    "ru-RU"
+                  )}{" "}
+                  ₴
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 }
