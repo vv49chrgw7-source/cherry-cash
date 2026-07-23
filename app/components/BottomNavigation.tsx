@@ -7,7 +7,7 @@ import {
   ChartPie,
   Target,
   Plus,
-  User,
+  ReceiptText,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -111,11 +111,11 @@ export default function BottomNavigation() {
             "Цели"
           )}
 
-          {navItem(
-            "/profile",
-            <User size={22} />,
-            "Профиль"
-          )}
+{navItem(
+  "/transactions",
+  <ReceiptText size={22} />,
+  "Операции"
+)}
         </div>
       </nav>
 
