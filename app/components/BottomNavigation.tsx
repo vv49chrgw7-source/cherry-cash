@@ -8,6 +8,7 @@ import {
   Target,
   Plus,
   ReceiptText,
+  Wallet,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -77,7 +78,7 @@ export default function BottomNavigation() {
   return (
     <>
       <nav className="fixed bottom-5 left-1/2 z-50 w-[95%] max-w-md -translate-x-1/2">
-        <div className="glass shadow-pink flex h-20 items-center justify-between rounded-[32px] border border-white/40 px-6">
+        <div className="glass shadow-pink flex h-20 items-center justify-between rounded-[32px] border border-white/40 px-4">
 
           {navItem("/", <House size={22} />, "Главная")}
 
@@ -86,6 +87,12 @@ export default function BottomNavigation() {
             <ChartPie size={22} />,
             "Статистика"
           )}
+
+          {navItem(
+  "/budgets",
+  <Wallet size={22} />,
+  "Бюджеты"
+)}
 
           <motion.button
             whileTap={{ scale: 0.92 }}
