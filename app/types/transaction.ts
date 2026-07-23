@@ -13,5 +13,5 @@ export interface Transaction {
 
   type: TransactionType;
 
-  date: string;
+  date: string; // ISO-строка, например: 2026-07-22T14:30:00.000Z
 }

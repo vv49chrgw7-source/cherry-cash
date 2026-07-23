@@ -31,6 +31,8 @@ const {
   setTransactions,
   updateTransaction,
 } = useTransactions();
+console.log("Context:", useTransactions());
+console.log("updateTransaction:", updateTransaction);
 
 const {
   editingTransaction,
@@ -50,12 +52,16 @@ const {
 
   const [amount, setAmount] = useState("");
 
-  const [description, setDescription] =
-    useState("");
+const [description, setDescription] =
+  useState("");
 
-  useEffect(() => {
-    setSelectedCategory(categories[0]);
-  }, [type]);
+const [date, setDate] = useState(
+  new Date().toISOString().split("T")[0]
+);
+
+useEffect(() => {
+  setSelectedCategory(categories[0]);
+}, [type]);
 
   useEffect(() => {
   if (!editingTransaction) return;
@@ -84,16 +90,16 @@ function addTransaction() {
   if (!amount || Number(amount) <= 0) return;
 
   if (editingTransaction) {
-    updateTransaction({
-      ...editingTransaction,
-      title:
-        description.trim() ||
-        selectedCategory.name,
-      category: selectedCategory.name,
-      emoji: selectedCategory.emoji,
-      amount: Number(amount),
-      type,
-    });
+updateTransaction({
+  ...editingTransaction,
+  title:
+    description.trim() || selectedCategory.name,
+  category: selectedCategory.name,
+  emoji: selectedCategory.emoji,
+  amount: Number(amount),
+  type,
+  date: new Date(date).toISOString(),
+});
 
     toast.success("🍒 Операция обновлена", {
       description: `${type === "income" ? "+" : "-"}${Number(amount).toLocaleString()} ₴`,
@@ -112,7 +118,7 @@ function addTransaction() {
     emoji: selectedCategory.emoji,
     amount: Number(amount),
     type,
-    date: "Сегодня",
+date: new Date(date).toISOString(),
   };
 
   setTransactions((prev) => [
@@ -266,16 +272,19 @@ className="glass w-full max-w-md max-h-[90vh] overflow-y-auto overscroll-contain
             />
           </div>
 
-          <div className="glass flex items-center gap-4 rounded-3xl border border-white/40 px-5 py-5">
-            <Calendar
-              className="text-pink-500"
-              size={24}
-            />
+<div className="glass flex items-center gap-4 rounded-3xl border border-white/40 px-5 py-5">
+  <Calendar
+    className="text-pink-500"
+    size={24}
+  />
 
-            <span className="font-medium text-gray-500">
-              Сегодня
-            </span>
-          </div>
+  <input
+    type="date"
+    value={date}
+    onChange={(e) => setDate(e.target.value)}
+    className="w-full bg-transparent outline-none text-gray-600"
+  />
+</div>
 
           <motion.button
             whileHover={{
