@@ -7,9 +7,9 @@ export default function ProfilePage() {
         👤 Профиль
       </h1>
 
-      <p className="mt-3 text-gray-500">
-        Здесь будут настройки приложения.
-      </p>
+<p className="mt-3 text-gray-500">
+  Здесь будет ваш профиль.
+</p>
     </main>
   );
 }

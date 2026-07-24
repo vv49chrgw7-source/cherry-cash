@@ -9,8 +9,13 @@ import {
 
 import { Transaction } from "../types/transaction";
 
-type ModalType = "transaction" | "goal" | null;
-type TransactionType = "income" | "expense";
+type ModalType =
+  | "transaction"
+  | "goal"
+  | "budget"
+  | null;
+
+  type TransactionType = "income" | "expense";
 
 interface ModalContextType {
   modal: ModalType;
@@ -27,6 +32,8 @@ interface ModalContextType {
   ) => void;
 
   openGoalModal: () => void;
+
+  openBudgetModal: () => void;
 
   closeModal: () => void;
 }
@@ -68,6 +75,10 @@ export function ModalProvider({
     setModal("goal");
   }
 
+  function openBudgetModal() {
+  setModal("budget");
+}
+
   function closeModal() {
     setModal(null);
     setEditingTransaction(null);
@@ -75,15 +86,16 @@ export function ModalProvider({
 
   return (
     <ModalContext.Provider
-      value={{
-        modal,
-        transactionType,
-        editingTransaction,
-        openTransactionModal,
-        openEditTransaction,
-        openGoalModal,
-        closeModal,
-      }}
+value={{
+  modal,
+  transactionType,
+  editingTransaction,
+  openTransactionModal,
+  openEditTransaction,
+  openGoalModal,
+  openBudgetModal,
+  closeModal,
+}}
     >
       {children}
     </ModalContext.Provider>

@@ -1,5 +1,18 @@
 "use client";
 
+import Link from "next/link";
+import SectionHeader from "./components/ui/SectionHeader";
+import AnimatedCard from "./components/ui/AnimatedCard";
+import ProgressBar from "./components/ui/ProgressBar";
+import { Heart } from "lucide-react";
+import StatCard from "./components/ui/StatCard";
+import {
+  Wallet,
+  FileText,
+  TrendingDown,
+} from "lucide-react";
+
+import { useBudgets } from "./context/BudgetsContext";
 import { useMemo, useState } from "react";
 import {
   Search,
@@ -8,6 +21,8 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   PlusCircle,
+  Settings,
+  UserCircle2,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -29,6 +44,30 @@ export default function Home() {
   } = useTransactions();
 
   const { goals } = useGoals();
+  const { budgets } = useBudgets();
+
+const expensePercent =
+  income === 0
+    ? 0
+    : Math.round((expense / income) * 100);
+
+    const health =
+  income === 0
+    ? 100
+    : Math.max(0, 100 - expensePercent);
+
+let healthText = "Отлично";
+let progressColor: "green" | "yellow" | "red" = "green";
+
+if (health < 80) {
+  healthText = "Хорошо";
+  progressColor = "yellow";
+}
+
+if (health < 50) {
+  healthText = "Стоит экономить";
+  progressColor = "red";
+}
 
   const {
     openTransactionModal,
@@ -77,21 +116,33 @@ export default function Home() {
           {greeting}
         </p>
 
-        <div className="mt-2 flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-black tracking-tight">
-              Анастасия
-            </h1>
+<div className="mt-2 flex items-start justify-between">
+  <div>
+    <h1 className="text-4xl font-black tracking-tight">
+      Анастасия
+    </h1>
 
-            <p className="mt-1 text-gray-500">
-              Добро пожаловать в Cherry Cash 🍒
-            </p>
-          </div>
+    <p className="mt-1 text-gray-500">
+      Добро пожаловать в Cherry Cash 🍒
+    </p>
+  </div>
 
-          <div className="gradient-card shadow-pink flex h-14 w-14 items-center justify-center rounded-2xl text-white">
-            <Sparkles size={26} />
-          </div>
-        </div>
+  <div className="flex gap-3">
+    <Link
+      href="/profile"
+      className="glass card-hover flex h-12 w-12 items-center justify-center rounded-2xl"
+    >
+      <UserCircle2 size={22} />
+    </Link>
+
+    <Link
+      href="/settings"
+      className="glass card-hover flex h-12 w-12 items-center justify-center rounded-2xl"
+    >
+      <Settings size={22} />
+    </Link>
+  </div>
+</div>
       </motion.div>
 
       <div className="mt-8">
@@ -101,6 +152,78 @@ export default function Home() {
           expense={expense}
         />
       </div>
+
+      <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.05 }}
+  className="mt-6 grid grid-cols-2 gap-4"
+>
+  <StatCard
+    title="Операций"
+    value={transactions.length.toString()}
+    icon={<FileText size={20} className="text-pink-600" />}
+  />
+
+  <StatCard
+    title="Бюджетов"
+    value={budgets.length.toString()}
+    icon={<Wallet size={20} className="text-pink-600" />}
+  />
+
+  <StatCard
+    title="Целей"
+    value={goals.length.toString()}
+    icon={<Target size={20} className="text-pink-600" />}
+  />
+
+  <StatCard
+    title="Расходы"
+    value={`${expensePercent}%`}
+    valueColor={
+      expensePercent >= 90
+        ? "text-red-500"
+        : expensePercent >= 70
+        ? "text-yellow-500"
+        : "text-green-600"
+    }
+    icon={
+      <TrendingDown
+        size={20}
+        className="text-pink-600"
+      />
+    }
+  />
+</motion.div>
+
+<AnimatedCard className="mt-6 p-5" delay={0.08}>
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm text-gray-500">
+        Финансовое здоровье
+      </p>
+
+      <h2 className="mt-1 text-2xl font-bold">
+        {health}%
+      </h2>
+    </div>
+
+    <div className="rounded-2xl bg-pink-100 p-3 text-pink-600">
+      <Heart size={24} />
+    </div>
+  </div>
+
+  <div className="mt-5">
+    <ProgressBar
+      value={health}
+      color={progressColor}
+    />
+
+    <p className="mt-3 text-sm font-medium text-gray-500">
+      {healthText}
+    </p>
+  </div>
+</AnimatedCard>
 
       <motion.div
         initial={{ opacity: 0, y: 25 }}
@@ -243,21 +366,18 @@ export default function Home() {
         />
       </motion.div>
 
-      <div className="mt-10 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">
-            Последние операции
-          </h2>
-
-          <p className="text-sm text-gray-500">
-            Последние добавленные транзакции
-          </p>
-        </div>
-
-        <span className="rounded-full bg-pink-100 px-3 py-1 text-sm font-medium text-pink-600">
-          {filteredTransactions.length}
-        </span>
-      </div>
+<SectionHeader
+  title="Последние операции"
+  subtitle="Последние добавленные транзакции"
+  right={
+    <Link
+      href="/transactions"
+      className="rounded-full bg-pink-100 px-4 py-2 text-sm font-medium text-pink-600 transition hover:bg-pink-200"
+    >
+      Все →
+    </Link>
+  }
+/>
 
 <div className="mt-5 space-y-4">
   {filteredTransactions.length > 0 ? (
