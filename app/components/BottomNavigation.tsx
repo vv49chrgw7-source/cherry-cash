@@ -1,5 +1,6 @@
 "use client";
 
+import AddBudgetModal from "./AddBudgetModal";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -20,13 +21,14 @@ import { useModal } from "../context/ModalContext";
 export default function BottomNavigation() {
   const pathname = usePathname();
 
-  const {
-    modal,
-    transactionType,
-    openTransactionModal,
-    openGoalModal,
-    closeModal,
-  } = useModal();
+const {
+  modal,
+  transactionType,
+  openTransactionModal,
+  openGoalModal,
+  openBudgetModal,
+  closeModal,
+} = useModal();
 
   const navItem = (
     href: string,
@@ -100,13 +102,15 @@ export default function BottomNavigation() {
               scale: 1.08,
               rotate: 90,
             }}
-            onClick={() => {
-              if (pathname === "/goals") {
-                openGoalModal();
-              } else {
-                openTransactionModal("expense");
-              }
-            }}
+onClick={() => {
+  if (pathname === "/goals") {
+    openGoalModal();
+  } else if (pathname === "/budgets") {
+    openBudgetModal();
+  } else {
+    openTransactionModal("expense");
+  }
+}}
             className="gradient-card shadow-pink -mt-12 flex h-18 w-18 items-center justify-center rounded-full border-4 border-white text-white"
           >
             <Plus size={32} strokeWidth={2.8} />
@@ -138,6 +142,12 @@ export default function BottomNavigation() {
           onClose={closeModal}
         />
       )}
+      
+      {modal === "budget" && (
+  <AddBudgetModal
+    onClose={closeModal}
+  />
+)}
     </>
   );
 }
