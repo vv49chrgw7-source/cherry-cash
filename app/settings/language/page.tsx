@@ -1,7 +1,8 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, ArrowLeft } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { useRouter } from "next/navigation";
 
 const languages = [
   {
@@ -23,16 +24,28 @@ const languages = [
 
 export default function LanguagePage() {
   const { language, setLanguage } = useLanguage();
+  const router = useRouter();
 
   return (
     <main className="page-padding min-h-screen pb-40">
-      <h1 className="text-4xl font-black">
-        🌍 Язык
-      </h1>
+      <div className="mb-6 flex items-center gap-4">
+        <button
+          onClick={() => router.back()}
+          className="rounded-2xl bg-white p-3 shadow-md transition hover:scale-105 active:scale-95"
+        >
+          <ArrowLeft size={22} />
+        </button>
 
-      <p className="mt-2 text-gray-500">
-        Выберите язык приложения
-      </p>
+        <div>
+          <h1 className="text-4xl font-black">
+            🌍 Язык
+          </h1>
+
+          <p className="mt-1 text-gray-500">
+            Выберите язык приложения
+          </p>
+        </div>
+      </div>
 
       <div className="mt-8 space-y-4">
         {languages.map((item) => (

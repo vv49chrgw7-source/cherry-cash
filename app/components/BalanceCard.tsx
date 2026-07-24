@@ -4,6 +4,11 @@ import { ArrowDownRight, ArrowUpRight, Wallet } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+import { useCurrency } from "../context/CurrencyContext";
+import { useExchangeRates } from "../context/ExchangeRateContext";
+
+import { formatMoney } from "../utils/formatMoney";
+
 interface BalanceCardProps {
   balance: number;
   income: number;
@@ -15,6 +20,8 @@ export default function BalanceCard({
   income,
   expense,
 }: BalanceCardProps) {
+  const { currency } = useCurrency();
+  const { rates } = useExchangeRates();
   const [animatedBalance, setAnimatedBalance] = useState(balance);
 const [animatedIncome, setAnimatedIncome] = useState(income);
 const [animatedExpense, setAnimatedExpense] = useState(expense);
@@ -83,9 +90,9 @@ useEffect(() => {
               Общий баланс
             </p>
 
-            <h2 className="mt-3 text-5xl font-black tracking-tight">
-             {animatedBalance.toLocaleString("ru-RU")} ₴
-            </h2>
+<h2 className="mt-3 text-5xl font-black tracking-tight">
+  {formatMoney(animatedBalance, currency.code, rates)}
+</h2>
 
             <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 backdrop-blur-md">
               <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -116,9 +123,9 @@ useEffect(() => {
               </span>
             </div>
 
-            <p className="text-2xl font-bold">
-             {animatedIncome.toLocaleString("ru-RU")} ₴
-            </p>
+<p className="text-2xl font-bold">
+  {formatMoney(animatedIncome, currency.code, rates)}
+</p>
           </motion.div>
 
           <motion.div
@@ -135,9 +142,9 @@ useEffect(() => {
               </span>
             </div>
 
-            <p className="text-2xl font-bold">
-              {animatedExpense.toLocaleString("ru-RU")} ₴
-            </p>
+<p className="text-2xl font-bold">
+  {formatMoney(animatedExpense, currency.code, rates)}
+</p>
           </motion.div>
         </div>
       </div>

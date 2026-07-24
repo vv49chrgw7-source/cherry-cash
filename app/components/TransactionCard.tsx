@@ -3,6 +3,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import DeleteTransactionModal from "./DeleteTransactionModal";
+import { useCurrency } from "../context/CurrencyContext";
+import { useExchangeRates } from "../context/ExchangeRateContext";
+import { formatMoney } from "../utils/formatMoney";
 
 import {
   Trash2,
@@ -45,6 +48,8 @@ export default function TransactionCard({
   onDelete,
 }: TransactionCardProps) {
   const income = transaction.type === "income";
+  const { currency } = useCurrency();
+const { rates } = useExchangeRates();
   const { openEditTransaction } = useModal();
   const [showDeleteModal, setShowDeleteModal] =
   useState(false);
@@ -134,8 +139,8 @@ className={`text-2xl font-black leading-none tracking-tight ${
     : "text-rose-600"
 }`}
             >
-              {income ? "+" : "-"}
-              {transaction.amount.toLocaleString("ru-RU")} ₴
+{income ? "+" : "-"}
+{formatMoney(transaction.amount, currency.code, rates)}
             </p>
           </div>
 
@@ -144,7 +149,7 @@ onClick={(e) => {
   e.stopPropagation();
   setShowDeleteModal(true);
 }}
-className="rounded-2xl p-2 text-gray-400 opacity-0 transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-red-50 hover:text-red-500 active:scale-95"
+className="rounded-2xl p-2 text-gray-400 transition-all duration-300 hover:scale-110 hover:bg-red-50 hover:text-red-500 active:scale-95"
             title="Удалить"
           >
             <Trash2 size={18} />

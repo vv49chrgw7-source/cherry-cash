@@ -11,6 +11,9 @@ import {
   ChevronRight,
   Languages,
 } from "lucide-react";
+import { useCurrency } from "@/app/context/CurrencyContext";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type SettingItem = {
   icon: React.ElementType;
@@ -20,7 +23,10 @@ type SettingItem = {
   href?: string;
 };
 
-const settings: SettingItem[] = [
+export default function SettingsPage() {
+    const { currency } = useCurrency();
+    const router = useRouter();
+    const settings: SettingItem[] = [
   {
     icon: Palette,
     title: "Внешний вид",
@@ -35,7 +41,8 @@ const settings: SettingItem[] = [
   {
     icon: Coins,
     title: "Валюта",
-    subtitle: "₴ Гривна",
+    subtitle: `${currency.symbol} ${currency.name}`,
+    href: "/settings/currency",
   },
   {
     icon: Bell,
@@ -59,17 +66,26 @@ const settings: SettingItem[] = [
     danger: true,
   },
 ];
-
-export default function SettingsPage() {
   return (
     <main className="page-padding min-h-screen pb-40">
-      <h1 className="text-4xl font-black">
-        ⚙️ Настройки
-      </h1>
+<div className="mb-6 flex items-center gap-4">
+  <button
+onClick={() => router.replace("/")}
+    className="rounded-2xl bg-white p-3 shadow-md transition hover:scale-105 active:scale-95"
+  >
+    <ArrowLeft size={22} />
+  </button>
 
-      <p className="mt-2 text-gray-500">
-        Настройте Cherry Cash под себя
-      </p>
+  <div>
+    <h1 className="text-4xl font-black">
+      ⚙️ Настройки
+    </h1>
+
+    <p className="mt-1 text-gray-500">
+      Настройте Cherry Cash под себя
+    </p>
+  </div>
+</div>
 
       <div className="mt-8 space-y-4">
         {settings.map((item) => {

@@ -8,9 +8,15 @@ import TransactionCard from "../components/TransactionCard";
 import BottomNavigation from "../components/BottomNavigation";
 
 import { useTransactions } from "../context/TransactionsContext";
+import { useCurrency } from "../context/CurrencyContext";
+import { useExchangeRates } from "../context/ExchangeRateContext";
+import { formatMoney } from "../utils/formatMoney";
 
 export default function TransactionsPage() {
   const { transactions, setTransactions } = useTransactions();
+
+  const { currency } = useCurrency();
+const { rates } = useExchangeRates();
 
   const [search, setSearch] = useState("");
     const [typeFilter, setTypeFilter] = useState<
@@ -200,9 +206,9 @@ const totalExpense = filteredTransactions
         Доходы
       </p>
 
-      <h3 className="mt-2 text-2xl font-black">
-        {totalIncome.toLocaleString("ru-RU")} ₴
-      </h3>
+<h3 className="mt-2 text-2xl font-black">
+  {formatMoney(totalIncome, currency.code, rates)}
+</h3>
     </div>
 
     <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
@@ -210,9 +216,9 @@ const totalExpense = filteredTransactions
         Расходы
       </p>
 
-      <h3 className="mt-2 text-2xl font-black">
-        {totalExpense.toLocaleString("ru-RU")} ₴
-      </h3>
+<h3 className="mt-2 text-2xl font-black">
+  {formatMoney(totalExpense, currency.code, rates)}
+</h3>
     </div>
 
   </div>
