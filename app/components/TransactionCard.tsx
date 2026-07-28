@@ -3,9 +3,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import DeleteTransactionModal from "./DeleteTransactionModal";
-import { useCurrency } from "../context/CurrencyContext";
-import { useExchangeRates } from "../context/ExchangeRateContext";
-import { formatMoney } from "../utils/formatMoney";
+import { useMoney } from "../hooks/useMoney";
 
 import {
   Trash2,
@@ -48,8 +46,7 @@ export default function TransactionCard({
   onDelete,
 }: TransactionCardProps) {
   const income = transaction.type === "income";
-  const { currency } = useCurrency();
-const { rates } = useExchangeRates();
+const money = useMoney();
   const { openEditTransaction } = useModal();
   const [showDeleteModal, setShowDeleteModal] =
   useState(false);
@@ -140,7 +137,7 @@ className={`text-2xl font-black leading-none tracking-tight ${
 }`}
             >
 {income ? "+" : "-"}
-{formatMoney(transaction.amount, currency.code, rates)}
+{money.format(transaction.amount)}
             </p>
           </div>
 

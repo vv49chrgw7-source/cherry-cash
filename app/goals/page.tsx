@@ -11,9 +11,11 @@ import {
 import BottomNavigation from "../components/BottomNavigation";
 import AddMoneyToGoalModal from "../components/AddMoneyToGoalModal";
 import { useGoals } from "../context/GoalsContext";
+import { useMoney } from "../hooks/useMoney";
 
 export default function GoalsPage() {
   const { goals, removeGoal } = useGoals();
+const money = useMoney();
 
   const [selectedGoalId, setSelectedGoalId] =
     useState<number | null>(null);
@@ -139,16 +141,10 @@ export default function GoalsPage() {
                     {goal.title}
                   </h2>
 
-                  <p className="mt-1 text-gray-500">
-                    {goal.currentAmount.toLocaleString(
-                      "ru-RU"
-                    )}{" "}
-                    ₴ из{" "}
-                    {goal.targetAmount.toLocaleString(
-                      "ru-RU"
-                    )}{" "}
-                    ₴
-                  </p>
+<p className="mt-1 text-gray-500">
+  {money.format(goal.currentAmount)} из{" "}
+  {money.format(goal.targetAmount)}
+</p>
                 </div>
 
               </div>
@@ -198,15 +194,9 @@ export default function GoalsPage() {
                     Осталось накопить
                   </p>
 
-                  <h3 className="mt-1 text-xl font-bold">
-                    {Math.max(
-                      left,
-                      0
-                    ).toLocaleString(
-                      "ru-RU"
-                    )}{" "}
-                    ₴
-                  </h3>
+<h3 className="mt-1 text-xl font-bold">
+  {money.format(Math.max(left, 0))}
+</h3>
 
                 </div>
 

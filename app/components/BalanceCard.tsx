@@ -4,10 +4,7 @@ import { ArrowDownRight, ArrowUpRight, Wallet } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-import { useCurrency } from "../context/CurrencyContext";
-import { useExchangeRates } from "../context/ExchangeRateContext";
-
-import { formatMoney } from "../utils/formatMoney";
+import { useMoney } from "../hooks/useMoney";
 
 interface BalanceCardProps {
   balance: number;
@@ -20,8 +17,7 @@ export default function BalanceCard({
   income,
   expense,
 }: BalanceCardProps) {
-  const { currency } = useCurrency();
-  const { rates } = useExchangeRates();
+const money = useMoney();
   const [animatedBalance, setAnimatedBalance] = useState(balance);
 const [animatedIncome, setAnimatedIncome] = useState(income);
 const [animatedExpense, setAnimatedExpense] = useState(expense);
@@ -91,7 +87,7 @@ useEffect(() => {
             </p>
 
 <h2 className="mt-3 text-5xl font-black tracking-tight">
-  {formatMoney(animatedBalance, currency.code, rates)}
+{money.format(animatedBalance)}
 </h2>
 
             <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 backdrop-blur-md">
@@ -124,7 +120,7 @@ useEffect(() => {
             </div>
 
 <p className="text-2xl font-bold">
-  {formatMoney(animatedIncome, currency.code, rates)}
+{money.format(animatedIncome)}
 </p>
           </motion.div>
 
@@ -143,7 +139,7 @@ useEffect(() => {
             </div>
 
 <p className="text-2xl font-bold">
-  {formatMoney(animatedExpense, currency.code, rates)}
+{money.format(animatedExpense)}
 </p>
           </motion.div>
         </div>
