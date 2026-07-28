@@ -14,6 +14,8 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { useMoney } from "../hooks/useMoney";
+
 import BottomNavigation from "../components/BottomNavigation";
 import { useBudgets } from "../context/BudgetsContext";
 import { useTransactions } from "../context/TransactionsContext";
@@ -21,6 +23,7 @@ import { useTransactions } from "../context/TransactionsContext";
 export default function BudgetsPage() {
 const { budgets, deleteBudget } = useBudgets();
   const { transactions } = useTransactions();
+const money = useMoney();
   const { openBudgetModal } = useModal();
   const [openedMenu, setOpenedMenu] =
   useState<number | null>(null);
@@ -88,10 +91,10 @@ return (
                       {budget.category}
                     </h2>
 
-                    <p className="text-sm text-gray-500">
-                      {spent.toLocaleString()} ₴ из{" "}
-                      {budget.limit.toLocaleString()} ₴
-                    </p>
+<p className="text-sm text-gray-500">
+{money.format(spent)} из{" "}
+{money.format(budget.limit)}
+</p>
                   </div>
                 </div>
 
@@ -198,12 +201,10 @@ return (
                       : "text-red-500 font-semibold"
                   }
                 >
-                  {remaining >= 0
-                    ? `Осталось ${remaining.toLocaleString()} ₴`
-                    : `Перерасход ${Math.abs(
-                        remaining
-                      ).toLocaleString()} ₴`}
-                </span>
+{remaining >= 0
+  ? `Осталось ${money.format(remaining)}`
+  : `Перерасход ${money.format(Math.abs(remaining))}`}
+                      </span>
               </div>
               </GlassCard>
             </motion.div>

@@ -10,6 +10,7 @@ import {
   Label,
 } from "recharts";
 import { PieChart as PieChartIcon } from "lucide-react";
+import { useMoney } from "../../hooks/useMoney";
 
 interface CategoryData {
   name: string;
@@ -35,6 +36,8 @@ const COLORS = [
 export default function ExpensePieChart({
   data,
 }: ExpensePieChartProps) {
+  const money = useMoney();
+
   const total = data.reduce(
     (sum, item) => sum + item.value,
     0
@@ -111,7 +114,7 @@ export default function ExpensePieChart({
                         fontWeight={800}
                         fill="#111827"
                       >
-                        {total.toLocaleString("ru-RU")} ₴
+{money.format(total)}
                       </text>
 
                       <text
@@ -174,10 +177,7 @@ export default function ExpensePieChart({
 
               <div className="text-right">
                 <div className="text-lg font-bold">
-                  {item.value.toLocaleString(
-                    "ru-RU"
-                  )}{" "}
-                  ₴
+{money.format(item.value)}
                 </div>
               </div>
             </motion.div>

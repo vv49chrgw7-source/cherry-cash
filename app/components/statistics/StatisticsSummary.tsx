@@ -7,6 +7,8 @@ import {
   Wallet,
 } from "lucide-react";
 
+import { useMoney } from "../../hooks/useMoney";
+
 interface StatisticsSummaryProps {
   balance: number;
   income: number;
@@ -18,6 +20,7 @@ export default function StatisticsSummary({
   income,
   expense,
 }: StatisticsSummaryProps) {
+const money = useMoney();
   return (
     <div className="space-y-5">
 
@@ -35,7 +38,7 @@ export default function StatisticsSummary({
             </p>
 
             <h2 className="mt-3 text-5xl font-black tracking-tight">
-              {balance.toLocaleString("ru-RU")} ₴
+{money.format(balance)}
             </h2>
 
             <p className="mt-3 inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm">
@@ -73,7 +76,7 @@ export default function StatisticsSummary({
           </p>
 
           <h3 className="mt-1 text-3xl font-black text-emerald-600">
-            +{income.toLocaleString("ru-RU")} ₴
++{money.format(income)}
           </h3>
         </motion.div>
 
@@ -99,7 +102,7 @@ export default function StatisticsSummary({
           </p>
 
           <h3 className="mt-1 text-3xl font-black text-rose-600">
-            -{expense.toLocaleString("ru-RU")} ₴
+-{money.format(expense)}
           </h3>
         </motion.div>
 
